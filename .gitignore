@@ -1,1 +1,32 @@
-.env
+# --- FORGE Specifics ---
+workspace/               # The AI's scratchpad/output folder
+qdrant_storage/          # Local vector database files
+.env                     # YOUR API KEYS (CRITICAL!)
+logs/                    # Any internal agent log files
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# --- Docker ---
+.docker/
+# Ignore docker logs but keep the compose file
+*.log
+
+# --- IDEs & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
