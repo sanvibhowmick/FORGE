@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # The Vector Database for Memory Storage
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: forge_memory
+    ports:
+      - "6333:6333" # HTTP API
+      - "6334:6334" # gRPC API
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    restart: unless-stopped
+
+  # The Orchestrator: This is where your OpenAI Agents live
+  forge-app:
+    build: .
+    container_name: forge_orchestrator
+    depends_on:
+      - qdrant
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock # Allows Agent to spin up sandboxes
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    name: forge_network
